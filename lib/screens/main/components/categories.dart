@@ -4,44 +4,59 @@ import 'package:furniture_app/models/category.dart';
 
 import '../../../constants.dart';
 
-class Categories extends StatefulWidget {
-  final Category cat;
-  const Categories({Key? key, required this.cat}) : super(key: key);
+class CategoryMenu extends StatefulWidget {
+  const CategoryMenu({Key? key}) : super(key: key);
 
   @override
-  State<Categories> createState() => _CategoriesState();
+  State<CategoryMenu> createState() => _CategoryMenuState();
 }
 
-class _CategoriesState extends State<Categories> {
-  late final Category cat;
+class _CategoryMenuState extends State<CategoryMenu> {
+  //late CatModel cat;
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(defaultPadding),
-      child: Column(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.all(
-                Radius.circular(defaultPadding),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.13,
+      child: ListView.builder(
+        itemCount: CatModel.categories.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) => buildCategoryMenu(index),
+      ),
+    );
+  }
+
+  Widget buildCategoryMenu(int index) {
+    return GestureDetector(
+      onTap: (() {
+        setState(() {
+          selectedIndex = index;
+        });
+      }),
+      child: Padding(
+        padding: const EdgeInsets.only(left: defaultPadding, top: 8),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color:
+                    selectedIndex == index ? bgColor : const Color(0xFFF8F8F8),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(defaultPadding),
+                ),
               ),
+              padding: const EdgeInsets.all(20),
+              child: SvgPicture.asset(CatModel.categories[index].svgSrc),
             ),
-            height: 60,
-            width: 60,
-            padding: const EdgeInsets.all(12),
-            child: SvgPicture.asset(""),
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          const Text(
-              //CatModel.categories[index].name,
-              ""
+            const SizedBox(
+              height: 7,
+            ),
+            Text(
+              CatModel.categories[index].name,
               //style: const TextStyle(fontFamily: "San-serif"),
-              )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:furniture_app/constants.dart';
 import 'package:furniture_app/models/category.dart';
+import 'package:furniture_app/models/items.dart';
 
-import '../../constants.dart';
-import '../../models/category.dart';
 import 'components/categories.dart';
 import 'components/header.dart';
 import 'components/search_bar.dart';
@@ -17,81 +16,74 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
+        title: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Header(),
         ),
       ),
       body: Column(
         children: [
           SearchBar(),
-          CategoryMenu()
-          // Expanded(
-          //   child: ListView.builder(
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: CatModel.categories.length,
-          //     itemBuilder: (context, index) => Categories(cat : CatModel.categories[index]),
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-}
-
-class CategoryMenu extends StatefulWidget {
-  const CategoryMenu({Key? key}) : super(key: key);
-
-  @override
-  State<CategoryMenu> createState() => _CategoryMenuState();
-}
-
-class _CategoryMenuState extends State<CategoryMenu> {
-  //late CatModel cat;
-  int selectedIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: CatModel.categories.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => buildCategoryMenu(index),
-      ),
-    );
-  }
-
-  Widget buildCategoryMenu(int index) {
-    return GestureDetector(
-      onTap: (() {
-        setState(() {
-          selectedIndex = index;
-        });
-      }),
-      child: Padding(
-        padding: const EdgeInsets.only(left: defaultPadding, top: 8),
-        child: Column(
-          children: [
-            Container(
-                decoration: BoxDecoration(
-                  color: selectedIndex == index ? bgColor : Color(0xFFF8F8F8),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(defaultPadding),
-                  ),
-                ),
-                height: 60,
-                width: 60,
-                padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset(CatModel.categories[index].svgSrc)),
-            const SizedBox(
-              height: 7,
+          CategoryMenu(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: GridView.builder(
+                  itemCount: ItemModel.items.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: defaultPadding,
+                      crossAxisSpacing: defaultPadding,
+                      childAspectRatio: 0.75),
+                  itemBuilder: (context, index) => Container(
+                        decoration: const BoxDecoration(
+                          //color: bgColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(defaultPadding * 0.5),
+                          ),
+                        ),
+                        child: Column(
+                          //crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Image.asset(
+                                ItemModel.items[index].imgSrc,
+                                fit: BoxFit.fill,
+                                alignment: Alignment.topLeft,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 15.0,
+                                  ),
+                                  child: Text(ItemModel.items[index].name),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("\$${ItemModel.items[index].price}"),
+                                    TextButton(
+                                      style: const ButtonStyle(),
+                                      onPressed: () {},
+                                      child: const Icon(
+                                        Icons.arrow_forward,
+                                        color: secondaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      )),
             ),
-            Text(
-              CatModel.categories[index].name,
-
-              //style: const TextStyle(fontFamily: "San-serif"),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
