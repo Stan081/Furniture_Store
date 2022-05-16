@@ -16,12 +16,16 @@ class _CategoryMenuState extends State<CategoryMenu> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.13,
-      child: ListView.builder(
-        itemCount: CatModel.categories.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => buildCategoryMenu(index),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.12,
+      child: Expanded(
+        //flex: 1,
+        //height: MediaQuery.of(context).size.height * 0.15,
+        child: ListView.builder(
+          itemCount: CatModel.categories.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) => buildCategoryMenu(index),
+        ),
       ),
     );
   }
@@ -38,16 +42,18 @@ class _CategoryMenuState extends State<CategoryMenu> {
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
-                color:
-                    selectedIndex == index ? bgColor : const Color(0xFFF8F8F8),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(defaultPadding),
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  color: selectedIndex == index
+                      ? bgColor
+                      : const Color(0xFFF8F8F8),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(defaultPadding),
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: SvgPicture.asset(CatModel.categories[index].svgSrc),
-            ),
+                padding: const EdgeInsets.all(defaultPadding * 0.8),
+                child: SvgPicture.asset(CatModel.categories[index].svgSrc)),
             const SizedBox(
               height: 7,
             ),

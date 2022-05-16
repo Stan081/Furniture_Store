@@ -3,13 +3,29 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends StatefulWidget {
   const SearchBar({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  final searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var data = searchController.text;
+
     return Container(
       margin: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
@@ -26,9 +42,10 @@ class SearchBar extends StatelessWidget {
               width: 30,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              controller: searchController,
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "Search for furniture",
                 fillColor: Color(0xFFF8F8F8),
